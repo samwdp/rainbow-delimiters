@@ -256,7 +256,8 @@ Used by font-lock for dynamic highlighting."
             (rainbow-delimiters--apply-color delim-pos (1+ (nth 0 ppss)) t))
            (t
             ;; Not an opening delimiter, so it's a closing delimiter.
-            (let ((matches-p (eq (cdr delim-syntax) (char-after (nth 1 ppss)))))
+            (let ((matches-p (and (nth 1 ppss)
+                                  (eq (cdr delim-syntax) (char-after (nth 1 ppss))))))
               (rainbow-delimiters--apply-color delim-pos (nth 0 ppss) matches-p))))))))
   ;; We already fontified the delimiters, tell font-lock there's nothing more
   ;; to do.
