@@ -282,5 +282,20 @@
                    1 2 (face (rainbow-delimiters-depth-2-face))
                    2 3 (face (rainbow-delimiters-depth-2-face)))))))))
 
+(ert-deftest highlights-unmatched-closing-at-depth-zero ()
+  "Test that unmatched closing delimiters at depth 0 are correctly handled.
+This test ensures that when (nth 1 ppss) is nil, we don't accidentally
+compare with (char-after nil) which would return the first char of buffer."
+  (with-temp-buffer-in-mode 'text-mode
+    (with-string (str "(extra text)")
+      ;; Insert an unmatched closing paren at the beginning
+      (goto-char (point-min))
+      (insert ")")
+      (fontify-buffer)
+      (should (ert-equal-including-properties
+               (buffer-substring 1 2)
+               #(")"
+                 0 1 (face (rainbow-delimiters-unmatched-face))))))))
+
 (provide 'rainbow-delimiters-test)
 ;;; rainbow-delimiters-test.el ends here
